@@ -60,7 +60,7 @@ var config = module.exports = (function () {
   : path.join(config.path || process.cwd(), 'node_modules', '.bin'))
 
   if(!config.path && config.global)
-    config.path = config.prefix
+    config.path = path.join(config.prefix, 'lib')
 
   for(var k in config)
     config[toCC(k)] = config[k]
