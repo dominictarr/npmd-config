@@ -1,0 +1,20 @@
+{
+  "name": "npmd-config",
+  "description": "get npmd-config",
+  "version": "1.0.0",
+  "homepage": "https://github.com/dominictarr/npmd-config",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dominictarr/npmd-config.git"
+  },
+  "dependencies": {
+    "rc": "~0.3.1",
+    "optimist": "~0.6.0"
+  },
+  "bin": "./index.js",
+  "scripts": {
+    "test": "set -e; for t in test/*.js; do node $t; done"
+  },
+  "author": "Dominic Tarr <dominic.tarr@gmail.com> (dominictarr.com)",
+  "license": "MIT"
+}
