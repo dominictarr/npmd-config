@@ -38,7 +38,7 @@ var config = module.exports = (function () {
     ),
     port: 5656
   },
-  optimist
+  clearFalse(optimist
     .alias('g', 'global')
     .alias('f', 'force')
     .alias('D', 'saveDev')
@@ -52,8 +52,15 @@ var config = module.exports = (function () {
     .boolean('save-peer')
     .boolean('savePeer')
     .boolean('save')
-    .argv
+    .argv)
   )
+
+  //undefined is falsey anyway,
+  //allow config from other sources to fall through
+  function clearFalse (opts) {
+    for(var k in opts)
+      delete opts[k]
+  }
 
   config.bin = config.bin ||
   ( config.global ? path.join(config.prefix, 'bin')
