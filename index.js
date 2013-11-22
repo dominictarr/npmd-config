@@ -59,7 +59,9 @@ var config = module.exports = (function () {
   //allow config from other sources to fall through
   function clearFalse (opts) {
     for(var k in opts)
-      delete opts[k]
+      if(opts[k] === false)
+        delete opts[k]
+    return opts
   }
 
   config.bin = config.bin ||
