@@ -22,7 +22,7 @@ var config = module.exports = (function () {
   // *** ^^^ Copied this stuff out of npmconf **********************
 
   var config = rc('npmd', {
-    dbPath: path.join(process.env.HOME, '.npmd'),
+    dbPath: path.join(home, '.npmd'),
     debug: true,
     sync: false,
     encoding: 'json',
