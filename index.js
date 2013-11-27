@@ -14,7 +14,7 @@ var config = module.exports = (function () {
   var uidOrPid = process.getuid ? process.getuid() : process.pid
 
   if (home) process.env.HOME = home
-  else home = path.resolve(temp, "npm-" + uidOrPid)
+  else home = path.resolve(tmp, "npm-" + uidOrPid)
 
   var cacheExtra = process.platform === "win32" ? "npm-cache" : ".npm"
   var cacheRoot = process.platform === "win32" && process.env.APPDATA || home
@@ -22,7 +22,7 @@ var config = module.exports = (function () {
   // *** ^^^ Copied this stuff out of npmconf **********************
 
   var config = rc('npmd', {
-    dbPath: path.join(process.env.HOME, '.npmd'),
+    dbPath: path.join(home, '.npmd'),
     debug: true,
     sync: false,
     encoding: 'json',
