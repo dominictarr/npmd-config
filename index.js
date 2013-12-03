@@ -23,7 +23,7 @@ var config = module.exports = (function () {
 
   var config = rc('npmd', {
     dbPath: path.join(home, '.npmd'),
-    debug: true,
+    debug: false,
     sync: false,
     encoding: 'json',
     registry: 'http://isaacs.iriscouch.com/registry',
