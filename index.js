@@ -41,7 +41,7 @@ var config = module.exports = (function () {
   clearFalse(optimist
     .alias('g', 'global')
     .alias('f', 'force')
-    .alias('D', 'saveDev')
+    .alias('D', 'save-dev')
     .alias('S', 'save')
     .alias('v', 'version')
     .boolean('global')
