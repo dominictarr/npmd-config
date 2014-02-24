@@ -26,7 +26,7 @@ var config = module.exports = (function () {
     debug: false,
     sync: false,
     encoding: 'json',
-    registry: 'http://isaacs.iriscouch.com/registry',
+    registry: 'https://registry.npmjs.org',
     cache: cache,
     "user-agent" : "node/" + process.version
                  + ' ' + process.platform
