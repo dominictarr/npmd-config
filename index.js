@@ -25,7 +25,6 @@ var config = module.exports = (function () {
     dbPath: path.join(home, '.npmd'),
     debug: false,
     sync: false,
-    encoding: 'json',
     registry: 'https://registry.npmjs.org',
     cache: cache,
     "user-agent" : "node/" + process.version
