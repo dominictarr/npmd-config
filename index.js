@@ -75,6 +75,13 @@ var config = module.exports = (function () {
   for(var k in config)
     config[toCC(k)] = config[k]
 
+  //parse credentials
+  if (config.Auth) {
+    var creds = Buffer(config.Auth, 'base64').toString()
+    var segs = creds.split(':')
+    config.credentials = { user: segs[0], pass: segs[1] }
+  }
+
   if(config.showConfig)
     console.log(JSON.stringify(config, null, 2))
 
