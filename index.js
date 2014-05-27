@@ -4,6 +4,8 @@ var path     = require('path')
 var rc       = require('rc')
 var optimist = require('optimist')
 var toCC     = require('to-camel-case')
+var fs       = require('fs')
+var ini      = require('ini')
 var osenv    = require('osenv')
 
 var home     = osenv.home()
@@ -64,6 +66,12 @@ var config = module.exports = (function () {
         delete opts[k]
     return opts
   }
+
+  if(home) try {
+    var c = ini.parse(fs.readFileSync(path.join(home, '.npmrc'), 'utf8'))
+    for (var k in c)
+      if(!config[k]) config[k] = c[k]
+  } catch(e) {}
 
   config.bin = config.bin ||
   ( config.global ? path.join(config.prefix, 'bin')
