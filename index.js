@@ -11,6 +11,13 @@ var osenv    = require('osenv')
 var home     = osenv.home()
 var tmp      = osenv.tmpdir()
 
+function dumpConfig (config) {
+  var _config = JSON.parse(JSON.stringify(config))
+  _config.credentials.pass = _config.credentials.pass.replace(/./g,'*')
+  _config.Auth = _config.Auth.replace(/./g, '*')
+  console.log(JSON.stringify(_config, null, 2))
+}
+
 var config = module.exports = (function () {
   // *** vvv Copied this stuff out of npmconf **********************
   var uidOrPid = process.getuid ? process.getuid() : process.pid
@@ -100,12 +107,11 @@ var config = module.exports = (function () {
     config.credentials = { user: segs[0], pass: segs[1] }
   }
 
-  if(config.showConfig)
-    console.log(JSON.stringify(config, null, 2))
-
+  if(config.showConfig) dumpConfig(config)
   return config
 })()
 
 
 if(!module.parent)
-  console.log(JSON.stringify(config, null, 2))
+  dumpConfig(config)
+
