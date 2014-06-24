@@ -30,7 +30,7 @@ var config = module.exports = (function () {
   var cache = path.resolve(cacheRoot, cacheExtra)
   // *** ^^^ Copied this stuff out of npmconf **********************
 
-  // merge defaults
+  // the defaults
   var defaults = {
     dbPath: path.join(home, '.npmd'),
     debug: false,
@@ -48,16 +48,17 @@ var config = module.exports = (function () {
     port: 5656
   }
 
-  // merge ~/.npmrc
+  // merge ~/.npmrc on top of the defaults
   if(home) try {
     var c = ini.parse(fs.readFileSync(path.join(home, '.npmrc'), 'utf8'))
     for (var k in c)
       defaults[k] = c[k]
   } catch(e) {}
 
-
+  // pass default and optimist to rc.
+  // note: we must clear the 
   var config = rc('npmd', defaults,
-    clearFalse(optimist
+    optimist
       .alias('g', 'global')
       .alias('f', 'force')
       .alias('D', 'save-dev')
@@ -65,30 +66,21 @@ var config = module.exports = (function () {
       .alias('v', 'version')
       .alias('dedupe', 'greedy')
       .boolean('global')
+      .default('global', null)
       .boolean('greedy')
+      .default('greedy', null)
       .boolean('online')
+      .default('online', null)
       .boolean('offline')
+      .default('offline', null)
       .boolean('save-dev')
+      .default('save-dev', null)
       .boolean('saveDev')
-      .boolean('save-peer')
-      .boolean('savePeer')
+      .default('saveDev', null)
       .boolean('save')
+      .default('save', null)
       .argv
-    )
   )
-
-  //undefined is falsey anyway,
-  //allow config from other sources to fall through
-  function clearFalse (opts) {
-    for(var k in opts)
-      if(opts[k] === false)
-        delete opts[k]
-    return opts
-  }
-
-  for (var k in defaults)
-    if (!(k in config))
-      config[k] = defaults[k]
 
   config.bin = config.bin ||
   ( config.global ? path.join(config.prefix, 'bin')
