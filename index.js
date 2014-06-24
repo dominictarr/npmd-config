@@ -23,43 +23,6 @@ var config = module.exports = (function () {
   var cache = path.resolve(cacheRoot, cacheExtra)
   // *** ^^^ Copied this stuff out of npmconf **********************
 
-  var config = rc('npmd', {},
-  clearFalse(optimist
-    .alias('g', 'global')
-    .alias('f', 'force')
-    .alias('D', 'save-dev')
-    .alias('S', 'save')
-    .alias('v', 'version')
-    .alias('dedupe', 'greedy')
-    .boolean('global')
-    .boolean('greedy')
-    .boolean('online')
-    .boolean('offline')
-    .boolean('save-dev')
-    .boolean('saveDev')
-    .boolean('save-peer')
-    .boolean('savePeer')
-    .boolean('save')
-    .argv)
-  )
-
-  //undefined is falsey anyway,
-  //allow config from other sources to fall through
-  function clearFalse (opts) {
-    for(var k in opts)
-      if(opts[k] === false)
-        delete opts[k]
-    return opts
-  }
-
-  // merge ~/.npmrc
-  if(home) try {
-    var c = ini.parse(fs.readFileSync(path.join(home, '.npmrc'), 'utf8'))
-    for (var k in c)
-      if(!config[k])
-        config[k] = c[k]
-  } catch(e) {}
-
   // merge defaults
   var defaults = {
     dbPath: path.join(home, '.npmd'),
@@ -77,6 +40,45 @@ var config = module.exports = (function () {
     ),
     port: 5656
   }
+
+  // merge ~/.npmrc
+  if(home) try {
+    var c = ini.parse(fs.readFileSync(path.join(home, '.npmrc'), 'utf8'))
+    for (var k in c)
+      defaults[k] = c[k]
+  } catch(e) {}
+
+
+  var config = rc('npmd', defaults,
+    clearFalse(optimist
+      .alias('g', 'global')
+      .alias('f', 'force')
+      .alias('D', 'save-dev')
+      .alias('S', 'save')
+      .alias('v', 'version')
+      .alias('dedupe', 'greedy')
+      .boolean('global')
+      .boolean('greedy')
+      .boolean('online')
+      .boolean('offline')
+      .boolean('save-dev')
+      .boolean('saveDev')
+      .boolean('save-peer')
+      .boolean('savePeer')
+      .boolean('save')
+      .argv
+    )
+  )
+
+  //undefined is falsey anyway,
+  //allow config from other sources to fall through
+  function clearFalse (opts) {
+    for(var k in opts)
+      if(opts[k] === false)
+        delete opts[k]
+    return opts
+  }
+
   for (var k in defaults)
     if (!(k in config))
       config[k] = defaults[k]
