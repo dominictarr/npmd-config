@@ -23,22 +23,7 @@ var config = module.exports = (function () {
   var cache = path.resolve(cacheRoot, cacheExtra)
   // *** ^^^ Copied this stuff out of npmconf **********************
 
-  var config = rc('npmd', {
-    dbPath: path.join(home, '.npmd'),
-    debug: false,
-    sync: false,
-    registry: 'https://registry.npmjs.org',
-    cache: cache,
-    "user-agent" : "node/" + process.version
-                 + ' ' + process.platform
-                 + ' ' + process.arch,
-    prefix: (
-      process.env.PREFIX ||
-      ( process.platform === 'win32' ? path.dirname(process.execPath)
-      : path.dirname(path.dirname(process.execPath)))
-    ),
-    port: 5656
-  },
+  var config = rc('npmd', {},
   clearFalse(optimist
     .alias('g', 'global')
     .alias('f', 'force')
@@ -67,11 +52,34 @@ var config = module.exports = (function () {
     return opts
   }
 
+  // merge ~/.npmrc
   if(home) try {
     var c = ini.parse(fs.readFileSync(path.join(home, '.npmrc'), 'utf8'))
     for (var k in c)
-      if(!config[k]) config[k] = c[k]
+      if(!config[k])
+        config[k] = c[k]
   } catch(e) {}
+
+  // merge defaults
+  var defaults = {
+    dbPath: path.join(home, '.npmd'),
+    debug: false,
+    sync: false,
+    registry: 'https://registry.npmjs.org',
+    cache: cache,
+    "user-agent" : "node/" + process.version
+                 + ' ' + process.platform
+                 + ' ' + process.arch,
+    prefix: (
+      process.env.PREFIX ||
+      ( process.platform === 'win32' ? path.dirname(process.execPath)
+      : path.dirname(path.dirname(process.execPath)))
+    ),
+    port: 5656
+  }
+  for (var k in defaults)
+    if (!(k in config))
+      config[k] = defaults[k]
 
   config.bin = config.bin ||
   ( config.global ? path.join(config.prefix, 'bin')
