@@ -14,7 +14,7 @@ var tmp      = osenv.tmpdir()
 function dumpConfig (config) {
   var _config = JSON.parse(JSON.stringify(config))
   if (_config.credentials) _config.credentials.pass = _config.credentials.pass.replace(/./g,'*')
-  _config.Auth = _config.Auth.replace(/./g, '*')
+  if (_config.Auth) _config.Auth = _config.Auth.replace(/./g, '*')
   console.log(JSON.stringify(_config, null, 2))
 }
 
