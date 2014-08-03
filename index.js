@@ -90,6 +90,10 @@ var config = module.exports = (function () {
       .argv
   )
 
+  var homePattern = process.platform === 'win32' ? /^~(\/|\\)/ : /^~\//
+  if (config.prefix.match(homePattern) && home)
+    config.prefix = path.resolve(home, config.prefix.substr(2))
+
   config.bin = config.bin ||
   ( config.global ? path.join(config.prefix, 'bin')
   : path.join(config.path || process.cwd(), 'node_modules', '.bin'))
