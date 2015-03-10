@@ -53,7 +53,14 @@ var config = module.exports = (function () {
       ( process.platform === 'win32' ? path.dirname(process.execPath)
       : path.dirname(path.dirname(process.execPath)))
     ),
-    port: 5656
+    port: 5656,
+    global: false,
+    greedy: false,
+    online: true,
+    offline: false,
+    'save-dev': false,
+    saveDev: false,
+    save: false,
   }
 
   // merge ~/.npmrc on top of the defaults
@@ -74,19 +81,19 @@ var config = module.exports = (function () {
       .alias('v', 'version')
       .alias('dedupe', 'greedy')
       .boolean('global')
-      .default('global', null)
+      .default('global', defaults.global)
       .boolean('greedy')
-      .default('greedy', null)
+      .default('greedy', defaults.greedy)
       .boolean('online')
-      .default('online', null)
+      .default('online', defaults.online)
       .boolean('offline')
-      .default('offline', null)
+      .default('offline', defaults.offline)
       .boolean('save-dev')
-      .default('save-dev', null)
+      .default('save-dev', defaults['save-def'])
       .boolean('saveDev')
-      .default('saveDev', null)
+      .default('saveDev', defaults.saveDev)
       .boolean('save')
-      .default('save', null)
+      .default('save', defaults.save)
       .argv
   )
 
