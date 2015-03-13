@@ -1,7 +1,7 @@
 {
   "name": "npmd-config",
   "description": "get npmd-config",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "homepage": "https://github.com/dominictarr/npmd-config",
   "repository": {
     "type": "git",
