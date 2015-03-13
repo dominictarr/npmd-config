@@ -2,7 +2,7 @@
 
 var path     = require('path')
 var rc       = require('rc')
-var optimist = require('optimist')
+var minimist = require('minimist')
 var toCC     = require('to-camel-case')
 var fs       = require('fs')
 var ini      = require('ini')
@@ -70,33 +70,39 @@ var config = module.exports = (function () {
       defaults[k] = c[k]
   } catch(e) {}
 
+  var opts = require('minimist')(process.argv.slice(2),
+      {
+        boolean: [
+          'global', 'greedy', 'online', 'offline', 'save-dev',
+          'saveDev', 'save', 'force', 'optional'
+        ],
+        alias: {
+          global: 'g',
+          force: 'f',
+          'save-dev': 'D',
+          'save': 'S',
+          'dedupe': 'greedy'
+        },
+        default: {
+          global    : null,
+          greedy    : null,
+          online    : null,
+          offline   : null,
+          'save-dev': null,
+          saveDev   : null,
+          save      : null,
+          force     : null,
+          optional  : null
+        }
+      })
+
+  for(var k in opts)
+    if(null === opts[k])
+      delete opts[k]
+
   // pass default and optimist to rc.
   // note: we must clear the 
-  var config = rc('npmd', defaults,
-    optimist
-      .alias('g', 'global')
-      .alias('f', 'force')
-      .alias('D', 'save-dev')
-      .alias('S', 'save')
-      .alias('v', 'version')
-      .alias('dedupe', 'greedy')
-      .boolean('global')
-      .default('global', defaults.global)
-      .boolean('greedy')
-      .default('greedy', defaults.greedy)
-      .boolean('online')
-      .default('online', defaults.online)
-      .boolean('offline')
-      .default('offline', defaults.offline)
-      .boolean('save-dev')
-      .default('save-dev', defaults['save-def'])
-      .boolean('saveDev')
-      .default('saveDev', defaults.saveDev)
-      .boolean('save')
-      .default('save', defaults.save)
-      .argv
-  )
-
+  var config = rc('npmd', defaults, opts)
   var homePattern = process.platform === 'win32' ? /^~(\/|\\)/ : /^~\//
   if (config.prefix.match(homePattern) && home)
     config.prefix = path.resolve(home, config.prefix.substr(2))
